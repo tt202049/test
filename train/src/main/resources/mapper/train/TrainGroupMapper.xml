@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.train.mapper.TrainGroupMapper">
+    
+    <resultMap type="TrainGroup" id="TrainGroupResult">
+        <result property="groupId"    column="group_id"    />
+        <result property="groupAvaliable"    column="group_avaliable"    />
+        <result property="usedTrain"    column="used_train"    />
+        <result property="freeTrain"    column="free_train"    />
+        <result property="groupNote"    column="group_note"    />
+    </resultMap>
+
+    <resultMap id="TrainGroupTrainCityResult" type="TrainGroup" extends="TrainGroupResult">
+        <collection property="trainCityList" notNullColumn="sub_citytrain_id" javaType="java.util.List" resultMap="TrainCityResult" />
+    </resultMap>
+
+    <resultMap type="TrainCity" id="TrainCityResult">
+        <result property="citytrainId"    column="sub_citytrain_id"    />
+        <result property="groupId"    column="sub_group_id"    />
+        <result property="citytrainName"    column="sub_citytrain_name"    />
+        <result property="depatureStation"    column="sub_depature_station"    />
+        <result property="terminalStation"    column="sub_terminal_station"    />
+        <result property="isAvaliable"    column="sub_is_avaliable"    />
+        <result property="trainsetNum"    column="sub_trainset_num"    />
+        <result property="arriveTime"    column="sub_arrive_time"    />
+        <result property="leaveTime"    column="sub_leave_time"    />
+        <result property="platformNo"    column="sub_platform_no"    />
+        <result property="deportNo"    column="sub_deport_no"    />
+        <result property="citytrainNote"    column="sub_citytrain_note"    />
+    </resultMap>
+
+    <sql id="selectTrainGroupVo">
+        select group_id, group_avaliable, used_train, free_train, group_note from train_group
+    </sql>
+
+    <select id="selectTrainGroupList" parameterType="TrainGroup" resultMap="TrainGroupResult">
+        <include refid="selectTrainGroupVo"/>
+        <where>  
+            <if test="groupId != null "> and group_id = #{groupId}</if>
+            <if test="groupAvaliable != null "> and group_avaliable = #{groupAvaliable}</if>
+            <if test="usedTrain != null  and usedTrain != ''"> and used_train = #{usedTrain}</if>
+            <if test="freeTrain != null  and freeTrain != ''"> and free_train = #{freeTrain}</if>
+            <if test="groupNote != null  and groupNote != ''"> and group_note = #{groupNote}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainGroupByGroupId" parameterType="Long" resultMap="TrainGroupTrainCityResult">
+        select a.group_id, a.group_avaliable, a.used_train, a.free_train, a.group_note,
+ b.citytrain_id as sub_citytrain_id, b.group_id as sub_group_id, b.citytrain_name as sub_citytrain_name, b.depature_station as sub_depature_station, b.terminal_station as sub_terminal_station, b.is_avaliable as sub_is_avaliable, b.trainset_num as sub_trainset_num, b.arrive_time as sub_arrive_time, b.leave_time as sub_leave_time, b.platform_no as sub_platform_no, b.deport_no as sub_deport_no, b.citytrain_note as sub_citytrain_note
+        from train_group a
+        left join train_city b on b.group_id = a.group_id
+        where a.group_id = #{groupId}
+    </select>
+        
+    <insert id="insertTrainGroup" parameterType="TrainGroup" useGeneratedKeys="true" keyProperty="groupId">
+        insert into train_group
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupAvaliable != null">group_avaliable,</if>
+            <if test="usedTrain != null">used_train,</if>
+            <if test="freeTrain != null">free_train,</if>
+            <if test="groupNote != null">group_note,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupAvaliable != null">#{groupAvaliable},</if>
+            <if test="usedTrain != null">#{usedTrain},</if>
+            <if test="freeTrain != null">#{freeTrain},</if>
+            <if test="groupNote != null">#{groupNote},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainGroup" parameterType="TrainGroup">
+        update train_group
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupAvaliable != null">group_avaliable = #{groupAvaliable},</if>
+            <if test="usedTrain != null">used_train = #{usedTrain},</if>
+            <if test="freeTrain != null">free_train = #{freeTrain},</if>
+            <if test="groupNote != null">group_note = #{groupNote},</if>
+        </trim>
+        where group_id = #{groupId}
+    </update>
+
+    <delete id="deleteTrainGroupByGroupId" parameterType="Long">
+        delete from train_group where group_id = #{groupId}
+    </delete>
+
+    <delete id="deleteTrainGroupByGroupIds" parameterType="String">
+        delete from train_group where group_id in 
+        <foreach item="groupId" collection="array" open="(" separator="," close=")">
+            #{groupId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteTrainCityByGroupIds" parameterType="String">
+        delete from train_city where group_id in 
+        <foreach item="groupId" collection="array" open="(" separator="," close=")">
+            #{groupId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTrainCityByGroupId" parameterType="Long">
+        delete from train_city where group_id = #{groupId}
+    </delete>
+
+    <insert id="batchTrainCity">
+        insert into train_city( citytrain_id, group_id, citytrain_name, depature_station, terminal_station, is_avaliable, trainset_num, arrive_time, leave_time, platform_no, deport_no, citytrain_note) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.citytrainId}, #{item.groupId}, #{item.citytrainName}, #{item.depatureStation}, #{item.terminalStation}, #{item.isAvaliable}, #{item.trainsetNum}, #{item.arriveTime}, #{item.leaveTime}, #{item.platformNo}, #{item.deportNo}, #{item.citytrainNote})
+        </foreach>
+    </insert>
+</mapper>

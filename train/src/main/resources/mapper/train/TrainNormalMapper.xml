@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.train.mapper.TrainNormalMapper">
+    
+    <resultMap type="TrainNormal" id="TrainNormalResult">
+        <result property="trainId"    column="train_id"    />
+        <result property="trainName"    column="train_name"    />
+        <result property="depatureStation"    column="depature_station"    />
+        <result property="isDepature"    column="is_depature"    />
+        <result property="terminalStation"    column="terminal_station"    />
+        <result property="isAvaliable"    column="is_avaliable"    />
+        <result property="trainsetNum"    column="trainset_num"    />
+        <result property="presetNum"    column="preset_num"    />
+        <result property="platformNo"    column="platform_no"    />
+        <result property="deportNo"    column="deport_no"    />
+        <result property="maxDirction"    column="max_dirction"    />
+        <result property="arriveTime"    column="arrive_time"    />
+        <result property="leaveTime"    column="leave_time"    />
+        <result property="stayTime"    column="stay_time"    />
+        <result property="isWaterup"    column="is_waterup"    />
+        <result property="coupeId"    column="coupe_id"    />
+        <result property="coupeName"    column="coupe_name"    />
+        <result property="coupeDay"    column="coupe_day"    />
+        <result property="note"    column="note"    />
+    </resultMap>
+
+    <sql id="selectTrainNormalVo">
+        select train_id, train_name, depature_station, is_depature, terminal_station, is_avaliable, trainset_num, preset_num, platform_no, deport_no, max_dirction, arrive_time, leave_time, stay_time, is_waterup, coupe_id, coupe_name, coupe_day, note from train_normal
+    </sql>
+
+    <select id="selectTrainNormalList" parameterType="TrainNormal" resultMap="TrainNormalResult">
+        <include refid="selectTrainNormalVo"/>
+        <where>  
+            <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
+            <if test="depatureStation != null  and depatureStation != ''"> and depature_station = #{depatureStation}</if>
+            <if test="isDepature != null "> and is_depature = #{isDepature}</if>
+            <if test="terminalStation != null  and terminalStation != ''"> and terminal_station = #{terminalStation}</if>
+            <if test="isAvaliable != null "> and is_avaliable = #{isAvaliable}</if>
+            <if test="trainsetNum != null "> and trainset_num = #{trainsetNum}</if>
+            <if test="presetNum != null "> and preset_num = #{presetNum}</if>
+            <if test="platformNo != null "> and platform_no = #{platformNo}</if>
+            <if test="deportNo != null  and deportNo != ''"> and deport_no = #{deportNo}</if>
+            <if test="maxDirction != null  and maxDirction != ''"> and max_dirction = #{maxDirction}</if>
+            <if test="arriveTime != null "> and arrive_time = #{arriveTime}</if>
+            <if test="leaveTime != null "> and leave_time = #{leaveTime}</if>
+            <if test="stayTime != null "> and stay_time = #{stayTime}</if>
+            <if test="isWaterup != null "> and is_waterup = #{isWaterup}</if>
+            <if test="coupeId != null "> and coupe_id = #{coupeId}</if>
+            <if test="coupeName != null  and coupeName != ''"> and coupe_name like concat('%', #{coupeName}, '%')</if>
+            <if test="coupeDay != null "> and coupe_day = #{coupeDay}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainNormalByTrainId" parameterType="Long" resultMap="TrainNormalResult">
+        <include refid="selectTrainNormalVo"/>
+        where train_id = #{trainId}
+    </select>
+        
+    <insert id="insertTrainNormal" parameterType="TrainNormal">
+        insert into train_normal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="trainId != null">train_id,</if>
+            <if test="trainName != null and trainName != ''">train_name,</if>
+            <if test="depatureStation != null and depatureStation != ''">depature_station,</if>
+            <if test="isDepature != null">is_depature,</if>
+            <if test="terminalStation != null and terminalStation != ''">terminal_station,</if>
+            <if test="isAvaliable != null">is_avaliable,</if>
+            <if test="trainsetNum != null">trainset_num,</if>
+            <if test="presetNum != null">preset_num,</if>
+            <if test="platformNo != null">platform_no,</if>
+            <if test="deportNo != null">deport_no,</if>
+            <if test="maxDirction != null and maxDirction != ''">max_dirction,</if>
+            <if test="arriveTime != null">arrive_time,</if>
+            <if test="leaveTime != null">leave_time,</if>
+            <if test="stayTime != null">stay_time,</if>
+            <if test="isWaterup != null">is_waterup,</if>
+            <if test="coupeId != null">coupe_id,</if>
+            <if test="coupeName != null and coupeName != ''">coupe_name,</if>
+            <if test="coupeDay != null">coupe_day,</if>
+            <if test="note != null">note,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="trainId != null">#{trainId},</if>
+            <if test="trainName != null and trainName != ''">#{trainName},</if>
+            <if test="depatureStation != null and depatureStation != ''">#{depatureStation},</if>
+            <if test="isDepature != null">#{isDepature},</if>
+            <if test="terminalStation != null and terminalStation != ''">#{terminalStation},</if>
+            <if test="isAvaliable != null">#{isAvaliable},</if>
+            <if test="trainsetNum != null">#{trainsetNum},</if>
+            <if test="presetNum != null">#{presetNum},</if>
+            <if test="platformNo != null">#{platformNo},</if>
+            <if test="deportNo != null">#{deportNo},</if>
+            <if test="maxDirction != null and maxDirction != ''">#{maxDirction},</if>
+            <if test="arriveTime != null">#{arriveTime},</if>
+            <if test="leaveTime != null">#{leaveTime},</if>
+            <if test="stayTime != null">#{stayTime},</if>
+            <if test="isWaterup != null">#{isWaterup},</if>
+            <if test="coupeId != null">#{coupeId},</if>
+            <if test="coupeName != null and coupeName != ''">#{coupeName},</if>
+            <if test="coupeDay != null">#{coupeDay},</if>
+            <if test="note != null">#{note},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainNormal" parameterType="TrainNormal">
+        update train_normal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="trainName != null and trainName != ''">train_name = #{trainName},</if>
+            <if test="depatureStation != null and depatureStation != ''">depature_station = #{depatureStation},</if>
+            <if test="isDepature != null">is_depature = #{isDepature},</if>
+            <if test="terminalStation != null and terminalStation != ''">terminal_station = #{terminalStation},</if>
+            <if test="isAvaliable != null">is_avaliable = #{isAvaliable},</if>
+            <if test="trainsetNum != null">trainset_num = #{trainsetNum},</if>
+            <if test="presetNum != null">preset_num = #{presetNum},</if>
+            <if test="platformNo != null">platform_no = #{platformNo},</if>
+            <if test="deportNo != null">deport_no = #{deportNo},</if>
+            <if test="maxDirction != null and maxDirction != ''">max_dirction = #{maxDirction},</if>
+            <if test="arriveTime != null">arrive_time = #{arriveTime},</if>
+            <if test="leaveTime != null">leave_time = #{leaveTime},</if>
+            <if test="stayTime != null">stay_time = #{stayTime},</if>
+            <if test="isWaterup != null">is_waterup = #{isWaterup},</if>
+            <if test="coupeId != null">coupe_id = #{coupeId},</if>
+            <if test="coupeName != null and coupeName != ''">coupe_name = #{coupeName},</if>
+            <if test="coupeDay != null">coupe_day = #{coupeDay},</if>
+            <if test="note != null">note = #{note},</if>
+        </trim>
+        where train_id = #{trainId}
+    </update>
+
+    <delete id="deleteTrainNormalByTrainId" parameterType="Long">
+        delete from train_normal where train_id = #{trainId}
+    </delete>
+
+    <delete id="deleteTrainNormalByTrainIds" parameterType="String">
+        delete from train_normal where train_id in 
+        <foreach item="trainId" collection="array" open="(" separator="," close=")">
+            #{trainId}
+        </foreach>
+    </delete>
+</mapper>

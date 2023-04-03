@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.train.mapper.TrainHighMapper">
+    
+    <resultMap type="TrainHigh" id="TrainHighResult">
+        <result property="hightrainId"    column="hightrain_id"    />
+        <result property="hightrainName"    column="hightrain_name"    />
+        <result property="isDepature"    column="is_depature"    />
+        <result property="depatureStation"    column="depature_station"    />
+        <result property="terminalStation"    column="terminal_station"    />
+        <result property="isAvaliable"    column="is_avaliable"    />
+        <result property="arriveTime"    column="arrive_time"    />
+        <result property="leaveTime"    column="leave_time"    />
+        <result property="trainsetNum"    column="trainset_num"    />
+        <result property="platformNo"    column="platform_no"    />
+        <result property="deportNo"    column="deport_no"    />
+        <result property="coupleId"    column="couple_id"    />
+        <result property="coupleName"    column="couple_name"    />
+    </resultMap>
+
+    <sql id="selectTrainHighVo">
+        select hightrain_id, hightrain_name, depature_station, terminal_station, is_depature,is_avaliable, arrive_time, leave_time, trainset_num, platform_no, deport_no, couple_id, couple_name from train_high
+    </sql>
+
+    <select id="selectTrainHighList" parameterType="TrainHigh" resultMap="TrainHighResult">
+        <include refid="selectTrainHighVo"/>
+        <where>  
+            <if test="hightrainName != null  and hightrainName != ''"> and hightrain_name like concat('%', #{hightrainName}, '%')</if>
+            <if test="depatureStation != null  and depatureStation != ''"> and depature_station = #{depatureStation}</if>
+            <if test="isDepature != null "> and is_depature = #{isDepature}</if>
+            <if test="terminalStation != null  and terminalStation != ''"> and terminal_station = #{terminalStation}</if>
+            <if test="isAvaliable != null "> and is_avaliable = #{isAvaliable}</if>
+            <if test="platformNo != null "> and platform_no = #{platformNo}</if>
+            <if test="deportNo != null "> and deport_no = #{deportNo}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrainHighByHightrainId" parameterType="Long" resultMap="TrainHighResult">
+        <include refid="selectTrainHighVo"/>
+        where hightrain_id = #{hightrainId}
+    </select>
+        
+    <insert id="insertTrainHigh" parameterType="TrainHigh" useGeneratedKeys="true" keyProperty="hightrainId">
+        insert into train_high
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hightrainName != null and hightrainName != ''">hightrain_name,</if>
+            <if test="depatureStation != null and depatureStation != ''">depature_station,</if>
+            <if test="terminalStation != null and terminalStation != ''">terminal_station,</if>
+            <if test="isDepature != null">is_depature,</if>
+            <if test="isAvaliable != null">is_avaliable,</if>
+            <if test="arriveTime != null">arrive_time,</if>
+            <if test="leaveTime != null">leave_time,</if>
+            <if test="trainsetNum != null">trainset_num,</if>
+            <if test="platformNo != null">platform_no,</if>
+            <if test="deportNo != null">deport_no,</if>
+            <if test="coupleId != null">couple_id,</if>
+            <if test="coupleName != null">couple_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hightrainName != null and hightrainName != ''">#{hightrainName},</if>
+            <if test="depatureStation != null and depatureStation != ''">#{depatureStation},</if>
+            <if test="terminalStation != null and terminalStation != ''">#{terminalStation},</if>
+            <if test="isDepature != null">#{isDepature},</if>
+            <if test="isAvaliable != null">#{isAvaliable},</if>
+            <if test="arriveTime != null">#{arriveTime},</if>
+            <if test="leaveTime != null">#{leaveTime},</if>
+            <if test="trainsetNum != null">#{trainsetNum},</if>
+            <if test="platformNo != null">#{platformNo},</if>
+            <if test="deportNo != null">#{deportNo},</if>
+            <if test="coupleId != null">#{coupleId},</if>
+            <if test="coupleName != null">#{coupleName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrainHigh" parameterType="TrainHigh">
+        update train_high
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hightrainName != null and hightrainName != ''">hightrain_name = #{hightrainName},</if>
+            <if test="depatureStation != null and depatureStation != ''">depature_station = #{depatureStation},</if>
+            <if test="terminalStation != null and terminalStation != ''">terminal_station = #{terminalStation},</if>
+            <if test="isDepature != null">is_depature = #{isDepature},</if>
+            <if test="isAvaliable != null">is_avaliable = #{isAvaliable},</if>
+            <if test="arriveTime != null">arrive_time = #{arriveTime},</if>
+            <if test="leaveTime != null">leave_time = #{leaveTime},</if>
+            <if test="trainsetNum != null">trainset_num = #{trainsetNum},</if>
+            <if test="platformNo != null">platform_no = #{platformNo},</if>
+            <if test="deportNo != null">deport_no = #{deportNo},</if>
+            <if test="coupleId != null">couple_id = #{coupleId},</if>
+            <if test="coupleName != null">couple_name = #{coupleName},</if>
+        </trim>
+        where hightrain_id = #{hightrainId}
+    </update>
+
+    <delete id="deleteTrainHighByHightrainId" parameterType="Long">
+        delete from train_high where hightrain_id = #{hightrainId}
+    </delete>
+
+    <delete id="deleteTrainHighByHightrainIds" parameterType="String">
+        delete from train_high where hightrain_id in 
+        <foreach item="hightrainId" collection="array" open="(" separator="," close=")">
+            #{hightrainId}
+        </foreach>
+    </delete>
+</mapper>
