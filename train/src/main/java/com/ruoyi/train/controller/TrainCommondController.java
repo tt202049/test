@@ -2,6 +2,8 @@ package com.ruoyi.train.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,6 +79,8 @@ public class TrainCommondController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody TrainCommond trainCommond)
     {
+        String userName = SecurityUtils.getUsername();
+        trainCommond.setCommondUser(userName);
         return toAjax(trainCommondService.insertTrainCommond(trainCommond));
     }
 

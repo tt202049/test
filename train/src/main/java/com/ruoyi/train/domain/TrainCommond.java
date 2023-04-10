@@ -29,6 +29,15 @@ public class TrainCommond extends BaseEntity
     @Excel(name = "调令影响交路")
     private Long groupId;
 
+    @Excel(name = "调令输入人")
+    private String commondUser;
+
+    @Excel(name = "调令种类")
+    private int commondType;
+
+    @Excel(name = "调令输入人")
+    private int shiftDay;
+
     /** 调令开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "调令开始时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -38,6 +47,12 @@ public class TrainCommond extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "调令结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
+
+    @Excel(name = "调令停开星期")
+    private String stopWeek;
+
+    @Excel(name = "调令停开天数")
+    private String stopDays;
 
     /** 调令影响高铁id */
     @Excel(name = "调令影响高铁id")
@@ -73,6 +88,15 @@ public class TrainCommond extends BaseEntity
         this.commondName = commondName;
     }
 
+    public String getCommondUser()
+    {
+        return commondUser;
+    }
+    public void setCommondUser(String commondUser)
+    {
+        this.commondUser = commondUser;
+    }
+
     public String getCommondName() 
     {
         return commondName;
@@ -81,6 +105,24 @@ public class TrainCommond extends BaseEntity
     {
         this.groupId = groupId;
     }
+
+    public int getCommondType() { return commondType; }
+    public void setCommondType(int commondType){ this.commondType = commondType; }
+
+    public String getStopWeek() {   return stopWeek;}
+    public void setStopWeek(String stopWeek)
+    {
+        this.stopWeek = stopWeek;
+    }
+
+    public String getStopDays() {   return stopDays;}
+    public void setStopDays(String stopDays)
+    {
+        this.stopDays = stopDays;
+    }
+
+    public int getShiftDay() {  return shiftDay;}
+    public void setShiftDay(int shiftDay){ this.shiftDay = shiftDay; }
 
     public Long getGroupId() 
     {
@@ -155,6 +197,10 @@ public class TrainCommond extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("commondId", getCommondId())
             .append("commondName", getCommondName())
+            .append("commondUser", getCommondUser())
+            .append("stopWeek",getStopWeek())
+            .append("stopDays", getStopDays())
+            .append("shiftDay", getShiftDay())
             .append("groupId", getGroupId())
             .append("startTime", getStartTime())
             .append("endTime", getEndTime())

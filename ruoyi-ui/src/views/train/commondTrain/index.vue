@@ -9,6 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-divider class="divider"></el-divider>
       <el-form-item label="调令影响交路" prop="groupId">
         <el-input
           v-model="queryParams.groupId"
@@ -120,6 +121,7 @@
       <el-table-column label="调令影响普速" align="center" prop="normaltrainId" />
       <el-table-column label="调令影响高铁车次" align="center" prop="citytrainName" />
       <el-table-column label="调令影响普速车次" align="center" prop="normaltrainName" />
+      <el-table-column label="调令录入人" align="center" prop="commondUser"/>
       <el-table-column label="调令具体内容" align="center" prop="commondContent" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -140,7 +142,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -191,6 +193,13 @@
     </el-dialog>
   </div>
 </template>
+
+<style>
+.divider{
+  margin: 5px 5px;
+  border-top: 1px;
+}
+</style>
 
 <script>
 import { listCommondTrain, getCommondTrain, delCommondTrain, addCommondTrain, updateCommondTrain } from "@/api/train/commondTrain";
@@ -275,7 +284,12 @@ export default {
         normaltrainId: null,
         citytrainName: null,
         normaltrainName: null,
-        commondContent: null
+        commondContent: null,
+        commondUser: null,
+        commondType: null,
+        shiftDay: null,
+        stopWeek: null,
+        stopDays: null,
       };
       this.resetForm("form");
     },
