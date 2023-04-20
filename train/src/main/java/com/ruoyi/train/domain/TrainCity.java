@@ -22,7 +22,7 @@ public class TrainCity extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 城际列车ID */
-    private Long citytrainId;
+    private Long trainId;
 
     /** 交路ID */
     @Excel(name = "交路ID")
@@ -30,7 +30,7 @@ public class TrainCity extends BaseEntity
 
     /** 城际列车号 */
     @Excel(name = "城际列车号")
-    private String citytrainName;
+    private String trainName;
 
     /** 始发站 */
     @Excel(name = "始发站")
@@ -74,14 +74,14 @@ public class TrainCity extends BaseEntity
     @Excel(name = "备注")
     private String citytrainNote;
 
-    public void setCitytrainId(Long citytrainId) 
+    public void setTrainId(Long citytrainId)
     {
-        this.citytrainId = citytrainId;
+        this.trainId = citytrainId;
     }
 
-    public Long getCitytrainId() 
+    public Long getTrainId()
     {
-        return citytrainId;
+        return trainId;
     }
     public void setGroupId(Long groupId) 
     {
@@ -92,14 +92,14 @@ public class TrainCity extends BaseEntity
     {
         return groupId;
     }
-    public void setCitytrainName(String citytrainName) 
+    public void setTrainName(String citytrainName)
     {
-        this.citytrainName = citytrainName;
+        this.trainName = citytrainName;
     }
 
-    public String getCitytrainName() 
+    public String getTrainName()
     {
-        return citytrainName;
+        return trainName;
     }
     public void setDepatureStation(String depatureStation) 
     {
@@ -186,9 +186,9 @@ public class TrainCity extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("citytrainId", getCitytrainId())
+            .append("trainId", getTrainId())
             .append("groupId", getGroupId())
-            .append("citytrainName", getCitytrainName())
+            .append("trainName", getTrainName())
             .append("depatureStation", getDepatureStation())
             .append("terminalStation", getTerminalStation())
             .append("isAvaliable", getIsAvaliable())

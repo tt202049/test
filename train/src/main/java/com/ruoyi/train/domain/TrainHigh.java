@@ -23,11 +23,11 @@ public class TrainHigh extends BaseEntity
 
     /** 高铁ID */
     @Excel(name = "高铁ID")
-    private Long hightrainId;
+    private Long trainId;
 
     /** 高铁车号 */
     @Excel(name = "高铁车号")
-    private String hightrainName;
+    private String trainName;
 
     /** 始发站 */
     @Excel(name = "始发站")
@@ -79,23 +79,23 @@ public class TrainHigh extends BaseEntity
     @Excel(name = "折返车号")
     private String coupleName;
 
-    public void setHightrainId(Long hightrainId) 
+    public void setTrainId(Long trainId)
     {
-        this.hightrainId = hightrainId;
+        this.trainId = trainId;
     }
 
-    public Long getHightrainId() 
+    public Long getTrainId()
     {
-        return hightrainId;
+        return trainId;
     }
-    public void setHightrainName(String hightrainName) 
+    public void setTrainName(String trainName)
     {
-        this.hightrainName = hightrainName;
+        this.trainName = trainName;
     }
 
-    public String getHightrainName() 
+    public String getTrainName()
     {
-        return hightrainName;
+        return trainName;
     }
     public void setDepatureStation(String depatureStation) 
     {
@@ -194,8 +194,8 @@ public class TrainHigh extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("hightrainId", getHightrainId())
-            .append("hightrainName", getHightrainName())
+            .append("hightrainId", getTrainId())
+            .append("hightrainName", getTrainName())
             .append("depatureStation", getDepatureStation())
             .append("isDepature", getIsDepature())
             .append("terminalStation", getTerminalStation())

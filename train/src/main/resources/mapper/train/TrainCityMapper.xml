@@ -5,9 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.train.mapper.TrainCityMapper">
     
     <resultMap type="TrainCity" id="TrainCityResult">
-        <result property="citytrainId"    column="citytrain_id"    />
+        <result property="trainId"    column="train_id"    />
         <result property="groupId"    column="group_id"    />
-        <result property="citytrainName"    column="citytrain_name"    />
+        <result property="trainName"    column="train_name"    />
         <result property="depatureStation"    column="depature_station"    />
         <result property="terminalStation"    column="terminal_station"    />
         <result property="isAvaliable"    column="is_avaliable"    />
@@ -20,15 +20,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTrainCityVo">
-        select citytrain_id, group_id, citytrain_name, depature_station, terminal_station, is_avaliable, trainset_num, arrive_time, leave_time, platform_no, deport_no, citytrain_note from train_city
+        select train_id, group_id, train_name, depature_station, terminal_station, is_avaliable, trainset_num, arrive_time, leave_time, platform_no, deport_no, citytrain_note from train_city
     </sql>
 
     <select id="selectTrainCityList" parameterType="TrainCity" resultMap="TrainCityResult">
         <include refid="selectTrainCityVo"/>
         <where>  
-            <if test="citytrainId != null "> and citytrain_id = #{citytrainId}</if>
+            <if test="trainId != null "> and train_id = #{trainId}</if>
             <if test="groupId != null "> and group_id = #{groupId}</if>
-            <if test="citytrainName != null  and citytrainName != ''"> and citytrain_name like concat('%', #{citytrainName}, '%')</if>
+            <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
             <if test="depatureStation != null  and depatureStation != ''"> and depature_station = #{depatureStation}</if>
             <if test="terminalStation != null  and terminalStation != ''"> and terminal_station = #{terminalStation}</if>
             <if test="isAvaliable != null "> and is_avaliable = #{isAvaliable}</if>
@@ -37,15 +37,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectTrainCityByCitytrainId" parameterType="Long" resultMap="TrainCityResult">
         <include refid="selectTrainCityVo"/>
-        where citytrain_id = #{citytrainId}
+        where train_id = #{trainId}
     </select>
         
     <insert id="insertTrainCity" parameterType="TrainCity">
         insert into train_city
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="citytrainId != null">citytrain_id,</if>
+            <if test="trainId != null">train_id,</if>
             <if test="groupId != null">group_id,</if>
-            <if test="citytrainName != null and citytrainName != ''">citytrain_name,</if>
+            <if test="trainName != null and trainName != ''">train_name,</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station,</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station,</if>
             <if test="isAvaliable != null">is_avaliable,</if>
@@ -57,9 +57,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="citytrainNote != null">citytrain_note,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="citytrainId != null">#{citytrainId},</if>
+            <if test="trainId != null">#{trainId},</if>
             <if test="groupId != null">#{groupId},</if>
-            <if test="citytrainName != null and citytrainName != ''">#{citytrainName},</if>
+            <if test="trainName != null and trainName != ''">#{trainName},</if>
             <if test="depatureStation != null and depatureStation != ''">#{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">#{terminalStation},</if>
             <if test="isAvaliable != null">#{isAvaliable},</if>
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update train_city
         <trim prefix="SET" suffixOverrides=",">
             <if test="groupId != null">group_id = #{groupId},</if>
-            <if test="citytrainName != null and citytrainName != ''">citytrain_name = #{citytrainName},</if>
+            <if test="trainName != null and trainName != ''">train_name = #{trainName},</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station = #{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station = #{terminalStation},</if>
             <if test="isAvaliable != null">is_avaliable = #{isAvaliable},</if>
@@ -105,13 +105,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <delete id="deleteTrainCityByCitytrainId" parameterType="Long">
-        delete from train_city where citytrain_id = #{citytrainId}
+        delete from train_city where train_id = #{trainId}
     </delete>
 
     <delete id="deleteTrainCityByCitytrainIds" parameterType="String">
-        delete from train_city where citytrain_id in 
-        <foreach item="citytrainId" collection="array" open="(" separator="," close=")">
-            #{citytrainId}
+        delete from train_city where train_id in
+        <foreach item="trainId" collection="array" open="(" separator="," close=")">
+            #{trainId}
         </foreach>
     </delete>
 </mapper>

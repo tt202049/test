@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.train.mapper.TrainHighMapper">
     
     <resultMap type="TrainHigh" id="TrainHighResult">
-        <result property="hightrainId"    column="hightrain_id"    />
-        <result property="hightrainName"    column="hightrain_name"    />
+        <result property="trainId"    column="train_id"    />
+        <result property="trainName"    column="train_name"    />
         <result property="isDepature"    column="is_depature"    />
         <result property="depatureStation"    column="depature_station"    />
         <result property="terminalStation"    column="terminal_station"    />
@@ -21,13 +21,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTrainHighVo">
-        select hightrain_id, hightrain_name, depature_station, terminal_station, is_depature,is_avaliable, arrive_time, leave_time, trainset_num, platform_no, deport_no, couple_id, couple_name from train_high
+        select train_id, train_name, depature_station, terminal_station, is_depature,is_avaliable, arrive_time, leave_time, trainset_num, platform_no, deport_no, couple_id, couple_name from train_high
     </sql>
 
     <select id="selectTrainHighList" parameterType="TrainHigh" resultMap="TrainHighResult">
         <include refid="selectTrainHighVo"/>
         <where>  
-            <if test="hightrainName != null  and hightrainName != ''"> and hightrain_name like concat('%', #{hightrainName}, '%')</if>
+            <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
             <if test="depatureStation != null  and depatureStation != ''"> and depature_station = #{depatureStation}</if>
             <if test="isDepature != null "> and is_depature = #{isDepature}</if>
             <if test="terminalStation != null  and terminalStation != ''"> and terminal_station = #{terminalStation}</if>
@@ -39,13 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectTrainHighByHightrainId" parameterType="Long" resultMap="TrainHighResult">
         <include refid="selectTrainHighVo"/>
-        where hightrain_id = #{hightrainId}
+        where train_id = #{trainId}
     </select>
         
     <insert id="insertTrainHigh" parameterType="TrainHigh" useGeneratedKeys="true" keyProperty="hightrainId">
         insert into train_high
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="hightrainName != null and hightrainName != ''">hightrain_name,</if>
+            <if test="trainName != null and trainName != ''">train_name,</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station,</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station,</if>
             <if test="isDepature != null">is_depature,</if>
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="coupleName != null">couple_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="hightrainName != null and hightrainName != ''">#{hightrainName},</if>
+            <if test="trainName != null and trainName != ''">#{trainName},</if>
             <if test="depatureStation != null and depatureStation != ''">#{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">#{terminalStation},</if>
             <if test="isDepature != null">#{isDepature},</if>
@@ -77,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateTrainHigh" parameterType="TrainHigh">
         update train_high
         <trim prefix="SET" suffixOverrides=",">
-            <if test="hightrainName != null and hightrainName != ''">hightrain_name = #{hightrainName},</if>
+            <if test="trainName != null and trainName != ''">train_name = #{trainName},</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station = #{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station = #{terminalStation},</if>
             <if test="isDepature != null">is_depature = #{isDepature},</if>
@@ -94,13 +94,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteTrainHighByHightrainId" parameterType="Long">
-        delete from train_high where hightrain_id = #{hightrainId}
+        delete from train_high where hightrain_id = #{trainId}
     </delete>
 
     <delete id="deleteTrainHighByHightrainIds" parameterType="String">
         delete from train_high where hightrain_id in 
-        <foreach item="hightrainId" collection="array" open="(" separator="," close=")">
-            #{hightrainId}
+        <foreach item="trainId" collection="array" open="(" separator="," close=")">
+            #{trainId}
         </foreach>
     </delete>
 </mapper>

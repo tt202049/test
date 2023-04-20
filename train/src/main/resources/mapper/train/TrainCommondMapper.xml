@@ -7,34 +7,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="TrainCommond" id="TrainCommondResult">
         <result property="commondId"    column="commond_id"    />
         <result property="commondName"    column="commond_name"    />
-        <result property="commondUser"    column="commond_user"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
         <result property="commondType" column="commond_type" />
+        <result property="trainType" column="train_type"/>
+        <result property="commondAffectTrainId" column="commond_affect_train_id"/>
+        <result property="commondAffectTrainName" column="commond_affect_train_name"/>
+        <result property="commondContent"    column="commond_content"    />
+        <result property="commondUser"    column="commond_user"    />
+        <result property="isWeekStop" column="is_weekstop"/>
         <result property="stopWeek" column="stop_week"/>
         <result property="stopDays" column="stop_days"/>
         <result property="shiftDay" column="shift_day"/>
-        <result property="groupId"    column="group_id"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="endTime"    column="end_time"    />
-        <result property="citytrainId"    column="citytrain_id"    />
-        <result property="normaltrainId"    column="normaltrain_id"    />
-        <result property="citytrainName"    column="citytrain_name"    />
-        <result property="normaltrainName"    column="normaltrain_name"    />
-        <result property="commondContent"    column="commond_content"    />
+        <result property="trainStartDay" column="train_startday"/>
+        <result property="trainStopDay" column="train_stopday"/>
     </resultMap>
 
     <sql id="selectTrainCommondVo">
-        select commond_id, commond_name, commond_user, commond_type, stop_week, shift_day, stop_days, group_id, start_time, end_time, citytrain_id, normaltrain_id, citytrain_name, normaltrain_name, commond_content from train_commond
+        select commond_id, commond_name, start_time, end_time, commond_type, train_type, commond_affect_train_id, commond_affect_train_name, commond_content, commond_user, is_weekstop, stop_week, stop_days, shift_day, train_startday, train_stopday from train_commond
     </sql>
 
     <select id="selectTrainCommondList" parameterType="TrainCommond" resultMap="TrainCommondResult">
         <include refid="selectTrainCommondVo"/>
         <where>  
             <if test="commondName != null  and commondName != ''"> and commond_name like concat('%', #{commondName}, '%')</if>
-            <if test="groupId != null "> and group_id = #{groupId}</if>
+<!--            <if test="groupId != null "> and group_id = #{groupId}</if>-->
             <if test="startTime != null "> and start_time = #{startTime}</if>
             <if test="endTime != null "> and end_time = #{endTime}</if>
-            <if test="citytrainName != null  and citytrainName != ''"> and citytrain_name like concat('%', #{citytrainName}, '%')</if>
-            <if test="normaltrainName != null  and normaltrainName != ''"> and normaltrain_name like concat('%', #{normaltrainName}, '%')</if>
+<!--            <if test="citytrainName != null  and citytrainName != ''"> and citytrain_name like concat('%', #{citytrainName}, '%')</if>-->
+<!--            <if test="normaltrainName != null  and normaltrainName != ''"> and normaltrain_name like concat('%', #{normaltrainName}, '%')</if>-->
             <if test="commondContent != null  and commondContent != ''"> and commond_content = #{commondContent}</if>
         </where>
     </select>
@@ -48,29 +49,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into train_commond
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="commondId != null">commond_id,</if>
-            <if test="commondName != null and commondName != ''">commond_name,</if>
-            <if test="commondUser != null and commondUser != ''">commond_user,</if>
-            <if test="groupId != null">group_id,</if>
-            <if test="startTime != null">start_time,</if>
-            <if test="endTime != null">end_time,</if>
-            <if test="citytrainId != null">citytrain_id,</if>
-            <if test="normaltrainId != null">normaltrain_id,</if>
-            <if test="citytrainName != null">citytrain_name,</if>
-            <if test="normaltrainName != null">normaltrain_name,</if>
-            <if test="commondContent != null and commondContent != ''">commond_content,</if>
+            <if test="commondName != null and commondName != ''">commond_name = #{commondName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="commondType != null">commond_type = #{commondType}</if>
+            <if test="trainType != null">train_type = #{trainType}</if>
+            <if test="commondAffectTrainId != null">commond_affect_train_id = #{commondAffectTrainId},</if>
+            <if test="commondAffectTrainName != null">commond_affect_train_name = #{commondAffectTrainName},</if>
+            <if test="commondContent != null and commondContent != ''">commond_content = #{commondContent},</if>
+            <if test="commondUser != null and commondUser != ''">commond_user = #{commondUser},</if>
+            <if test="isWeekStop != null">is_weekstop = #{isWeekStop},</if>
+            <if test="stopWeek != null">stop_week = #{stopWeek},</if>
+            <if test="stopDays != null">stop_days = #{stopDays},</if>
+            <if test="shiftDay != null">shift_day = #{shiftDay},</if>
+            <if test="trainStartday != null">train_startday = #{trainStartday},</if>
+            <if test="trainStopday != null">train_stopday = #{trainStopday},</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="commondId != null">#{commondId},</if>
-            <if test="commondName != null and commondName != ''">#{commondName},</if>
-            <if test="commondUser != null and commondUser != ''">#{commondUser},</if>
-            <if test="groupId != null">#{groupId},</if>
-            <if test="startTime != null">#{startTime},</if>
-            <if test="endTime != null">#{endTime},</if>
-            <if test="citytrainId != null">#{citytrainId},</if>
-            <if test="normaltrainId != null">#{normaltrainId},</if>
-            <if test="citytrainName != null">#{citytrainName},</if>
-            <if test="normaltrainName != null">#{normaltrainName},</if>
-            <if test="commondContent != null and commondContent != ''">#{commondContent},</if>
+            <if test="commondName != null and commondName != ''">commond_name = #{commondName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="commondType != null">commond_type = #{commondType}</if>
+            <if test="trainType != null">train_type = #{trainType}</if>
+            <if test="commondAffectTrainId != null">commond_affect_train_id = #{commondAffectTrainId},</if>
+            <if test="commondAffectTrainName != null">commond_affect_train_name = #{commondAffectTrainName},</if>
+            <if test="commondContent != null and commondContent != ''">commond_content = #{commondContent},</if>
+            <if test="commondUser != null and commondUser != ''">commond_user = #{commondUser},</if>
+            <if test="isWeekStop != null">is_weekstop = #{isWeekStop},</if>
+            <if test="stopWeek != null">stop_week = #{stopWeek},</if>
+            <if test="stopDays != null">stop_days = #{stopDays},</if>
+            <if test="shiftDay != null">shift_day = #{shiftDay},</if>
+            <if test="trainStartday != null">train_startday = #{trainStartday},</if>
+            <if test="trainStopday != null">train_stopday = #{trainStopday},</if>
          </trim>
     </insert>
 
@@ -78,15 +88,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update train_commond
         <trim prefix="SET" suffixOverrides=",">
             <if test="commondName != null and commondName != ''">commond_name = #{commondName},</if>
-            <if test="commondUser != null and commondUser != ''">commond_user = #{commondUser},</if>
-            <if test="groupId != null">group_id = #{groupId},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
-            <if test="citytrainId != null">citytrain_id = #{citytrainId},</if>
-            <if test="normaltrainId != null">normaltrain_id = #{normaltrainId},</if>
-            <if test="citytrainName != null">citytrain_name = #{citytrainName},</if>
-            <if test="normaltrainName != null">normaltrain_name = #{normaltrainName},</if>
+            <if test="commondType != null">commond_type = #{commondType}</if>
+            <if test="trainType != null">train_type = #{trainType}</if>
+            <if test="commondAffectTrainId != null">commond_affect_train_id = #{commondAffectTrainId},</if>
+            <if test="commondAffectTrainName != null">commond_affect_train_name = #{commondAffectTrainName},</if>
             <if test="commondContent != null and commondContent != ''">commond_content = #{commondContent},</if>
+            <if test="commondUser != null and commondUser != ''">commond_user = #{commondUser},</if>
+            <if test="isWeekStop != null">is_weekstop = #{isWeekStop},</if>
+            <if test="stopWeek != null">stop_week = #{stopWeek},</if>
+            <if test="stopDays != null">stop_days = #{stopDays},</if>
+            <if test="shiftDay != null">shift_day = #{shiftDay},</if>
+            <if test="trainStartday != null">train_startday = #{trainStartday},</if>
+            <if test="trainStopday != null">train_stopday = #{trainStopday},</if>
         </trim>
         where commond_id = #{commondId}
     </update>

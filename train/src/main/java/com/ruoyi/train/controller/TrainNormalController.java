@@ -22,7 +22,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 普速调令管理Controller
+ * 普速车次管理Controller
  * 
  * @author YALO
  * @date 2023-03-22
@@ -35,7 +35,7 @@ public class TrainNormalController extends BaseController
     private ITrainNormalService trainNormalService;
 
     /**
-     * 查询普速调令管理列表
+     * 查询普速车次管理列表
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:list')")
     @GetMapping("/list")
@@ -46,21 +46,27 @@ public class TrainNormalController extends BaseController
         return getDataTable(list);
     }
 
+    @PreAuthorize("@ss.hasPermi('train:normalTrain:list')")
+    @GetMapping("/allList")
+    public TableDataInfo allList(TrainNormal trainNormal){
+        return getDataTable(trainNormalService.selectTrainNormalList(trainNormal));
+    }
+
     /**
-     * 导出普速调令管理列表
+     * 导出普速车次管理列表
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:export')")
-    @Log(title = "普速调令管理", businessType = BusinessType.EXPORT)
+    @Log(title = "普速车次管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, TrainNormal trainNormal)
     {
         List<TrainNormal> list = trainNormalService.selectTrainNormalList(trainNormal);
         ExcelUtil<TrainNormal> util = new ExcelUtil<TrainNormal>(TrainNormal.class);
-        util.exportExcel(response, list, "普速调令管理数据");
+        util.exportExcel(response, list, "普速车次管理数据");
     }
 
     /**
-     * 获取普速调令管理详细信息
+     * 获取普速车次管理详细信息
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:query')")
     @GetMapping(value = "/{trainId}")
@@ -70,10 +76,10 @@ public class TrainNormalController extends BaseController
     }
 
     /**
-     * 新增普速调令管理
+     * 新增普速车次管理
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:add')")
-    @Log(title = "普速调令管理", businessType = BusinessType.INSERT)
+    @Log(title = "普速车次管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody TrainNormal trainNormal)
     {
@@ -81,10 +87,10 @@ public class TrainNormalController extends BaseController
     }
 
     /**
-     * 修改普速调令管理
+     * 修改普速车次管理
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:edit')")
-    @Log(title = "普速调令管理", businessType = BusinessType.UPDATE)
+    @Log(title = "普速车次管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody TrainNormal trainNormal)
     {
@@ -92,10 +98,10 @@ public class TrainNormalController extends BaseController
     }
 
     /**
-     * 删除普速调令管理
+     * 删除普速车次管理
      */
     @PreAuthorize("@ss.hasPermi('train:normalTrain:remove')")
-    @Log(title = "普速调令管理", businessType = BusinessType.DELETE)
+    @Log(title = "普速车次管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{trainIds}")
     public AjaxResult remove(@PathVariable Long[] trainIds)
     {
