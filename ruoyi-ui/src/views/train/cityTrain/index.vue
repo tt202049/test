@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="城际列车ID" prop="citytrainId">
+      <el-form-item label="城际列车ID" prop="trainId">
         <el-input
-          v-model="queryParams.citytrainId"
+          v-model="queryParams.trainId"
           placeholder="请输入城际列车ID"
           clearable
           @keyup.enter.native="handleQuery"
@@ -17,9 +17,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="城际列车号" prop="citytrainName">
+      <el-form-item label="城际列车号" prop="trainName">
         <el-input
-          v-model="queryParams.citytrainName"
+          v-model="queryParams.trainName"
           placeholder="请输入城际列车号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -103,9 +103,9 @@
 
     <el-table v-loading="loading" :data="cityTrainList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="城际列车ID" align="center" prop="citytrainId" />
+      <el-table-column label="城际列车ID" align="center" prop="trainId" />
       <el-table-column label="交路ID" align="center" prop="groupId" />
-      <el-table-column label="城际列车号" align="center" prop="citytrainName" />
+      <el-table-column label="城际列车号" align="center" prop="trainName" />
       <el-table-column label="始发站" align="center" prop="depatureStation" />
       <el-table-column label="终到站" align="center" prop="terminalStation" />
       <el-table-column label="是否开行" align="center" prop="isAvaliable" :formatter="isAvaliableFormat"/>
@@ -157,8 +157,8 @@
 <!--        <el-form-item label="交路ID" prop="groupId">-->
 <!--          <el-input v-model="form.groupId" placeholder="请输入交路ID" />-->
 <!--        </el-form-item>-->
-        <el-form-item label="城际列车号" prop="citytrainName">
-          <el-input v-model="form.citytrainName" placeholder="请输入城际列车号" />
+        <el-form-item label="城际列车号" prop="trainName">
+          <el-input v-model="form.trainName" placeholder="请输入城际列车号" />
         </el-form-item>
         <el-form-item label="始发站" prop="depatureStation">
           <el-input v-model="form.depatureStation" placeholder="请输入始发站" />
@@ -240,9 +240,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        citytrainId: null,
+        trainId: null,
         groupId: null,
-        citytrainName: null,
+        trainName: null,
         depatureStation: null,
         terminalStation: null,
         isAvaliable: null,
@@ -254,7 +254,7 @@ export default {
         groupId: [
           { required: true, message: "交路ID不能为空", trigger: "blur" }
         ],
-        citytrainName: [
+        trainName: [
           { required: true, message: "城际列车号不能为空", trigger: "blur" }
         ],
         depatureStation: [
@@ -290,9 +290,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        citytrainId: null,
+        trainId: null,
         groupId: null,
-        citytrainName: null,
+        trainName: null,
         depatureStation: null,
         terminalStation: null,
         isAvaliable: null,
@@ -317,7 +317,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.citytrainId)
+      this.ids = selection.map(item => item.trainId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -330,8 +330,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const citytrainId = row.citytrainId || this.ids
-      getCityTrain(citytrainId).then(response => {
+      const trainId = row.trainId || this.ids
+      getCityTrain(trainId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改城际列车管理";
@@ -341,7 +341,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.citytrainId != null) {
+          if (this.form.trainId != null) {
             updateCityTrain(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -359,9 +359,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const citytrainIds = row.citytrainId || this.ids;
-      this.$modal.confirm('是否确认删除城际列车管理编号为"' + citytrainIds + '"的数据项？').then(function() {
-        return delCityTrain(citytrainIds);
+      const trainIds = row.trainId || this.ids;
+      this.$modal.confirm('是否确认删除城际列车管理编号为"' + trainIds + '"的数据项？').then(function() {
+        return delCityTrain(trainIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

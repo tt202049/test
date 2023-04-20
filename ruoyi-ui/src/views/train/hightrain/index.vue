@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="高铁车号" prop="hightrainName">
+      <el-form-item label="高铁车号" prop="trainName">
         <el-input
-          v-model="queryParams.hightrainName"
+          v-model="queryParams.trainName"
           placeholder="请输入高铁车号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -95,8 +95,8 @@
 
     <el-table v-loading="loading" :data="hightrainList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="高铁ID" align="center" prop="hightrainId" />
-      <el-table-column label="高铁车号" align="center" prop="hightrainName" />
+      <el-table-column label="高铁ID" align="center" prop="trainId" />
+      <el-table-column label="高铁车号" align="center" prop="trainName" />
       <el-table-column label="始发站" align="center" prop="depatureStation" />
       <el-table-column label="终到站" align="center" prop="terminalStation" />
       <el-table-column label="是否始发" align="center" prop="isDepature" :formatter="isDepatureFormat"/>
@@ -147,8 +147,8 @@
     <!-- 添加或修改高铁车辆管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="高铁车号" prop="hightrainName">
-          <el-input v-model="form.hightrainName" placeholder="请输入高铁车号" />
+        <el-form-item label="高铁车号" prop="trainName">
+          <el-input v-model="form.trainName" placeholder="请输入高铁车号" />
         </el-form-item>
         <el-form-item label="始发站" prop="depatureStation">
           <el-input v-model="form.depatureStation" placeholder="请输入始发站" />
@@ -233,7 +233,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        hightrainName: null,
+        trainName: null,
         depatureStation: null,
         terminalStation: null,
         isDepature:null,
@@ -245,7 +245,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        hightrainName: [
+        trainName: [
           { required: true, message: "高铁车号不能为空", trigger: "blur" }
         ],
         depatureStation: [
@@ -290,8 +290,8 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        hightrainId: null,
-        hightrainName: null,
+        trainId: null,
+        trainName: null,
         depatureStation: null,
         terminalStation: null,
         isDepature:0,
@@ -318,7 +318,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.hightrainId)
+      this.ids = selection.map(item => item.trainId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -331,8 +331,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const hightrainId = row.hightrainId || this.ids
-      getHightrain(hightrainId).then(response => {
+      const trainId = row.trainId || this.ids
+      getHightrain(trainId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改高铁车辆管理";
@@ -342,7 +342,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.hightrainId != null) {
+          if (this.form.trainId != null) {
             updateHightrain(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -360,9 +360,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const hightrainIds = row.hightrainId || this.ids;
-      this.$modal.confirm('是否确认删除高铁车辆管理编号为"' + hightrainIds + '"的数据项？').then(function() {
-        return delHightrain(hightrainIds);
+      const trainIds = row.trainId || this.ids;
+      this.$modal.confirm('是否确认删除高铁车辆管理编号为"' + trainIds + '"的数据项？').then(function() {
+        return delHightrain(trainIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

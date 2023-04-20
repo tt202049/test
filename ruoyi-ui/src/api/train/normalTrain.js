@@ -9,6 +9,15 @@ export function listNormalTrain(query) {
   })
 }
 
+//查询普速所有车次
+export function allListNormalTrain(query) {
+  return request({
+    url: '/train/normalTrain/allList',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询普速调令管理详细
 export function getNormalTrain(trainId) {
   return request({

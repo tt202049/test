@@ -106,7 +106,6 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="调令id" align="center" prop="commondId" />
       <el-table-column label="调令名称" align="center" prop="commondName" />
-      <el-table-column label="调令影响交路" align="center" prop="groupId" />
       <el-table-column label="调令开始时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
@@ -117,11 +116,16 @@
           <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="调令影响高铁id" align="center" prop="citytrainId" />
-      <el-table-column label="调令影响普速" align="center" prop="normaltrainId" />
-      <el-table-column label="调令影响高铁车次" align="center" prop="citytrainName" />
-      <el-table-column label="调令影响普速车次" align="center" prop="normaltrainName" />
+      <el-table-column label="调令影响方式" align="center" prop="commondType" />
+      <el-table-column label="调令影响车辆类型" align="center" prop="trainType" />
+      <el-table-column label="调令偏移天数" align="center" prop="shiftDay" />
+      <!--      <el-table-column label="调令影响车次id" align="center" prop="commondAffectTrainId" />-->
+      <el-table-column label="调令影响车次/交路名称" align="center" prop="commondAffectTrainName" />
       <el-table-column label="调令录入人" align="center" prop="commondUser"/>
+      <el-table-column label="调令是否按周开行" align="center" prop="isWeekStop"/>
+      <el-table-column label="停开星期数" align="center" prop="stopWeek"/>
+      <el-table-column label="调令影响车次/交路生效时间" align="center" prop="trainStartDay" />
+      <el-table-column label="调令影响车次/交路失效时间" align="center" prop="trainStopDay" />
       <el-table-column label="调令具体内容" align="center" prop="commondContent" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -152,35 +156,64 @@
     />
 
     <!-- 添加或修改调令管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="调令名称" prop="commondName">
           <el-input v-model="form.commondName" placeholder="请输入调令名称" />
         </el-form-item>
-        <el-form-item label="调令影响交路" prop="groupId">
-          <el-input v-model="form.groupId" placeholder="请输入调令影响交路" />
+        <el-form-item label="调令类型" prop="commondType">
+          <el-col :span="12">
+            <el-cascader v-model="form.commondType"
+                         :options="commondOptions"
+                         :show-all-levels="false">
+            </el-cascader>
+          </el-col>
+          <el-col :span="12" v-if="this.form.commondType == 3">
+            <el-input v-model="form.trainSetNum" placeholder="请输入编组长度"></el-input>
+          </el-col>
         </el-form-item>
-        <el-form-item label="调令开始时间" prop="startTime">
-          <el-date-picker clearable
-            v-model="form.startTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择调令开始时间">
-          </el-date-picker>
+
+        <el-form-item label="选择车辆种类" prop="selectTrain">
+          <el-col :span = "12">
+            <el-cascader v-model="form.trainOptions"
+                         :options="trainOptions"
+                         :show-all-levels="false"
+                         @change="selectDifferentTrain">
+            </el-cascader>
+          </el-col>
+          <el-col :span = "12">
+            <el-select v-model="form.commondAffectTrainId" multiple filterable placeholder="选择车次/交路">
+              <el-option v-for="item in selectQuerry"
+                         :key = "item.trainId"
+                         :label = "item.trainName"
+                         :value = "item.trainId">
+
+              </el-option>
+            </el-select>
+          </el-col>
         </el-form-item>
-        <el-form-item label="调令结束时间" prop="endTime">
-          <el-date-picker clearable
-            v-model="form.endTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择调令结束时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="调令影响高铁车次" prop="citytrainName">
-          <el-input v-model="form.citytrainName" placeholder="请输入调令影响高铁车次" />
-        </el-form-item>
-        <el-form-item label="调令影响普速车次" prop="normaltrainName">
-          <el-input v-model="form.normaltrainName" placeholder="请输入调令影响普速车次" />
+
+        <el-form-item label="调令时间" prop="isWeek">
+          <el-col :span="12">
+            <el-select v-model="form.isWeekStop" placeholder="选择输入时间类型" @change="cleanDate">
+              <el-option v-for="item in dateOptions"
+                       :key = "item.value"
+                       :label = "item.label"
+                       :value= "item.value">
+
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="12" >
+            <el-select v-if="this.form.isWeekStop == 1" v-model="form.stopWeek" multiple placeholder="选择一个或多个星期数">
+              <el-option v-for="item in weekOptions"
+                         :key = " item.value"
+                         :label = "item.label"
+                         :value = "item.value"/>
+            </el-select>
+            <el-date-picker v-if="this.form.isWeekStop == 2" v-model="form.stopDays" type="dates" placeholder="选择一个或多个日期"></el-date-picker>
+            <el-date-picker v-if="this.form.isWeekStop == 3" v-model="tempDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="截止日期" @change="dateSplit"></el-date-picker>
+          </el-col>
         </el-form-item>
         <el-form-item label="调令具体内容">
           <editor v-model="form.commondContent" :min-height="192"/>
@@ -203,6 +236,9 @@
 
 <script>
 import { listCommondTrain, getCommondTrain, delCommondTrain, addCommondTrain, updateCommondTrain } from "@/api/train/commondTrain";
+import {listCityTrain} from "@/api/train/cityTrain";
+import {allListNormalTrain} from "@/api/train/normalTrain";
+import {listHightrain} from "@/api/train/hightrain";
 
 export default {
   name: "CommondTrain",
@@ -222,6 +258,8 @@ export default {
       total: 0,
       // 调令管理表格数据
       commondTrainList: [],
+      // 车次选择队列 里面根据commondOption动态更换
+      selectQuerry: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -231,7 +269,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         commondName: null,
-        groupId: null,
+        trainId: null,
         startTime: null,
         endTime: null,
         citytrainName: null,
@@ -251,7 +289,75 @@ export default {
         commondContent: [
           { required: true, message: "调令具体内容不能为空", trigger: "blur" }
         ]
-      }
+      },
+      tempDate : [],
+      dateOptions:[
+        {
+          value: '1',
+          label: '按星期选择'
+        },{
+          value: '2',
+          label: '按日期选择'
+        },{
+          value: '3',
+          label: '按起止日期选择'
+        }
+      ],
+      commondOptions:[
+        {
+          value: '1',
+          label: '加开'
+        },{
+          value: '2',
+          label: '停运'
+        },{
+          value: '3',
+          label: '编组变化'
+        }
+      ],
+      trainOptions :[
+        {
+          value: 'normal',
+          label: '普速车次'
+        },{
+          value: 'high',
+          label: '高铁车次'
+        },{
+          value: 'city',
+          label: '城际',
+          children: [{
+            value: 'group',
+            label: '交路号'
+          },{
+            value: 'city',
+            label: '城际车次'
+          }]
+        }
+      ],
+      weekOptions: [
+        {
+          value:'1',
+          label:'星期一'
+        },{
+          value:'2',
+          label:'星期二'
+        },{
+          value:'3',
+          label:'星期三'
+        },{
+          value:'4',
+          label:'星期四'
+        },{
+          value:'5',
+          label:'星期五'
+        },{
+          value:'6',
+          label:'星期六'
+        },{
+          value:'7',
+          label:'星期日'
+        }
+      ]
     };
   },
   created() {
@@ -277,19 +383,21 @@ export default {
       this.form = {
         commondId: null,
         commondName: null,
-        groupId: null,
-        startTime: null,
+        stratTime: null,
         endTime: null,
-        citytrainId: null,
-        normaltrainId: null,
-        citytrainName: null,
-        normaltrainName: null,
+        commondType: null,
+        trainType: null,
+        commondAffectTrainId: null,
+        commondAffectTrainName: null,
         commondContent: null,
         commondUser: null,
-        commondType: null,
-        shiftDay: null,
+        isWeekStop: null,
         stopWeek: null,
         stopDays: null,
+        shiftDay: null,
+        trainStartDay: null,
+        trainStopDays: null,
+        trainSetNum:null
       };
       this.resetForm("form");
     },
@@ -360,6 +468,49 @@ export default {
       this.download('train/commondTrain/export', {
         ...this.queryParams
       }, `commondTrain_${new Date().getTime()}.xlsx`)
+    },
+    /** 选择不同的车次
+     * 选择逻辑为
+     * |-普速
+     * |-动车
+     * |-城际-交路
+     * |-城际-车号*/
+    selectDifferentTrain() {
+      this.selectQuerry = []
+        if ( this.form.trainOptions[0]== "normal"){
+          allListNormalTrain().then(response => {
+            this.selectQuerry = response.rows;
+          });
+        }
+
+        if( this.form.trainOptions[0]== "high"){
+          listHightrain().then(response =>{
+            this.selectQuerry = response.rows;
+          })
+        }
+
+        if( this.form.trainOptions[0]== "city"){
+          if (this.form.trainOptions[1]=="city"){
+            listCityTrain().then(response =>{
+              this.selectQuerry = response.rows;
+            });
+          }else if(this.form.trainOptions[1]=="group"){
+            console.log("group")
+          }
+        }
+
+    },
+    cleanDate(){
+      this.form.stopWeek = null
+      this.form.stopDays = null
+      this.form.trainStopDays = null
+      this.form.trainStartDay = null
+    },
+    dateSplit(){
+      if (this.tempDate != null){
+        this.form.trainStartDay = this.tempDate[1]
+        this.form.trainStopDays = this.tempDate[0]
+      }
     }
   }
 };
