@@ -99,6 +99,15 @@
           v-hasPermi="['train:commondTrain:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-view"
+          size="mini"
+          @click="handleToday"
+        >当日调令</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -163,10 +172,18 @@
         </el-form-item>
         <el-form-item label="调令类型" prop="commondType">
           <el-col :span="12">
-            <el-cascader v-model="form.commondType"
-                         :options="commondOptions"
-                         :show-all-levels="false">
-            </el-cascader>
+<!--            <el-cascader v-model="form.commondType"-->
+<!--                         :options="commondOptions"-->
+<!--                         :show-all-levels="false">-->
+<!--            </el-cascader>-->
+            <el-select v-model="form.commondType"  filterable placeholder="调令类型">
+              <el-option v-for="item in commondOptions"
+                       :key = item.label
+                       :label = item.label
+                       :value = item.value>
+
+              </el-option>
+            </el-select>
           </el-col>
           <el-col :span="12" v-if="this.form.commondType == 3">
             <el-input v-model="form.trainSetNum" placeholder="请输入编组长度"></el-input>
@@ -235,7 +252,14 @@
 </style>
 
 <script>
-import { listCommondTrain, getCommondTrain, delCommondTrain, addCommondTrain, updateCommondTrain } from "@/api/train/commondTrain";
+import {
+  listCommondTrain,
+  getCommondTrain,
+  delCommondTrain,
+  addCommondTrain,
+  updateCommondTrain,
+  selectCommondByDay
+} from "@/api/train/commondTrain";
 import {listCityTrain} from "@/api/train/cityTrain";
 import {allListNormalTrain} from "@/api/train/normalTrain";
 import {listHightrain} from "@/api/train/hightrain";
@@ -435,6 +459,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      this.form.commondAffectTrainId = this.form.commondAffectTrainId.toString();
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.commondId != null) {
@@ -462,6 +487,13 @@ export default {
         this.getList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
+    },
+    /** 查询今日调令操作 */
+    handleToday(){
+      selectCommondByDay(now.getDate()).then(response => {
+        this.commondTrainList = response.rows;
+        this.total = response.total;
+      })
     },
     /** 导出按钮操作 */
     handleExport() {

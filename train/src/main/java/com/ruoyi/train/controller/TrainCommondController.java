@@ -1,5 +1,6 @@
 package com.ruoyi.train.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,6 +49,7 @@ public class TrainCommondController extends BaseController
         return getDataTable(list);
     }
 
+
     /**
      * 导出调令管理列表
      */
@@ -81,6 +83,7 @@ public class TrainCommondController extends BaseController
     {
         String userName = SecurityUtils.getUsername();
         trainCommond.setCommondUser(userName);
+        System.out.println(trainCommond);
         return toAjax(trainCommondService.insertTrainCommond(trainCommond));
     }
 
@@ -104,5 +107,16 @@ public class TrainCommondController extends BaseController
     public AjaxResult remove(@PathVariable Long[] commondIds)
     {
         return toAjax(trainCommondService.deleteTrainCommondByCommondIds(commondIds));
+    }
+
+
+    /**
+     * 获取当日调令
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('train:commondTrain:query')")
+    @PostMapping("/selectCommondByDay")
+    public AjaxResult selectCommondByDay(Date dateTime){
+        return success(trainCommondService.selectCommondByDay(dateTime));
     }
 }

@@ -1,5 +1,6 @@
 package com.ruoyi.train.service;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.train.domain.TrainCommond;
 
@@ -26,6 +27,7 @@ public interface ITrainCommondService
      * @return 调令管理集合
      */
     public List<TrainCommond> selectTrainCommondList(TrainCommond trainCommond);
+
 
     /**
      * 新增调令管理
@@ -58,4 +60,10 @@ public interface ITrainCommondService
      * @return 结果
      */
     public int deleteTrainCommondByCommondId(Long commondId);
+
+    /**
+     * 查询当日生效调令
+     * @return
+     */
+    public List<TrainCommond> selectCommondByDay(Date inputDate);
 }

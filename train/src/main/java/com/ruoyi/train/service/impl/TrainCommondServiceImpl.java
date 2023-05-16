@@ -1,5 +1,6 @@
 package com.ruoyi.train.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,5 +90,14 @@ public class TrainCommondServiceImpl implements ITrainCommondService
     public int deleteTrainCommondByCommondId(Long commondId)
     {
         return trainCommondMapper.deleteTrainCommondByCommondId(commondId);
+    }
+
+    /**
+     * 查询当日生效调令
+     * @return
+     */
+    @Override
+    public List<TrainCommond> selectCommondByDay(Date inputDate){
+        return trainCommondMapper.selectCommondByDay(inputDate);
     }
 }

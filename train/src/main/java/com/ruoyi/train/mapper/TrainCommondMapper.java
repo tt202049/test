@@ -1,5 +1,6 @@
 package com.ruoyi.train.mapper;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.train.domain.TrainCommond;
 
@@ -58,4 +59,10 @@ public interface TrainCommondMapper
      * @return 结果
      */
     public int deleteTrainCommondByCommondIds(Long[] commondIds);
+
+    /**
+     * 查询当日生效调令
+     * @return
+     */
+    public List<TrainCommond> selectCommondByDay(Date inputDate);
 }

@@ -42,3 +42,12 @@ export function delCommondTrain(commondId) {
     method: 'delete'
   })
 }
+
+//使用日期查询调令
+export function selectCommondByDay(date){
+  return request({
+    url:'/train/commondTrain/selectCommondByDay',
+    method:'post',
+    date:date
+  })
+}

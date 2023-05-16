@@ -2,6 +2,10 @@ package com.ruoyi.train.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ruoyi.common.utils.serializer.ArrayToStringDeserializer;
+import com.ruoyi.common.utils.serializer.ArrayToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -42,10 +46,14 @@ public class TrainCommond extends BaseEntity
     private int trainType;
 
     /** 调令影响车次/调令Id */
+//    @JsonDeserialize(using = ArrayToStringDeserializer.class)
+//    @JsonSerialize(using = ArrayToStringSerializer.class)
     @Excel(name = "调令影响车次/调令Id")
     private String commondAffectTrainId;
 
     /** 调令影响车次/调令名称 */
+//    @JsonDeserialize(using = ArrayToStringDeserializer.class)
+//    @JsonSerialize(using = ArrayToStringSerializer.class)
     @Excel(name = "调令影响车次/调令名称")
     private String commondAffectTrainName;
 
