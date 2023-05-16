@@ -21,6 +21,7 @@ public class TrainCommond extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /** 测试 */
     /** 调令id */
     @Excel(name = "调令id")
     private Long commondId;
