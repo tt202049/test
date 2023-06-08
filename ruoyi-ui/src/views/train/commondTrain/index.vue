@@ -69,6 +69,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="autoAdd"
+          v-hasPermi="['train:commondTrain:add']"
+        >自动识别调令</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="success"
           plain
           icon="el-icon-edit"
@@ -163,6 +173,21 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 自动识别添加调令-->
+    <el-dialog :title="title" :visible.sync="autoopen" width="800px" append-to-body>
+      <el-upload
+        class="upload-word"
+        accept=".doc, .docx"
+        :action= "11"
+        :http-request="uploadfile"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        :on-exceed="handleExceed">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">已上传文件</div>
+      </el-upload>
+    </el-dialog>
 
     <!-- 添加或修改调令管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
@@ -258,7 +283,8 @@ import {
   delCommondTrain,
   addCommondTrain,
   updateCommondTrain,
-  selectCommondByDay
+  selectCommondByDay,
+  uploadWord,
 } from "@/api/train/commondTrain";
 import {listCityTrain} from "@/api/train/cityTrain";
 import {allListNormalTrain} from "@/api/train/normalTrain";
@@ -288,6 +314,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示自动添加弹出层
+      autoopen: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -300,6 +328,8 @@ export default {
         normaltrainName: null,
         commondContent: null
       },
+      // 上传调令列表
+      // fileList: [],
       // 表单参数
       form: {},
       // 表单校验
@@ -447,6 +477,12 @@ export default {
       this.open = true;
       this.title = "添加调令管理";
     },
+    /** 自动解析新增按钮操作 */
+    autoAdd() {
+      this.reset();
+      this.autoopen = true;
+      this.title = "自动识别添加调令";
+    },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -543,7 +579,28 @@ export default {
         this.form.trainStartDay = this.tempDate[1]
         this.form.trainStopDays = this.tempDate[0]
       }
-    }
+   },
+    uploadfile(file){
+      var formData = new FormData()
+      formData.append("file",file.file)
+      uploadWord(formData).then(res => {
+        if(resp && resp.status == 200){
+          // this.fileList.append(file)
+        }
+      })
+    },
+    handleRemove(file, fileList) {
+        console.log(file, fileList);
+    },
+    handlePreview(file) {
+        console.log(file);
+    },
+    handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+    },
+    beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+    },
   }
 };
 </script>

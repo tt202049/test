@@ -3,6 +3,7 @@ package com.ruoyi.train.service;
 import java.util.Date;
 import java.util.List;
 import com.ruoyi.train.domain.TrainCommond;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 调令管理Service接口
@@ -66,4 +67,6 @@ public interface ITrainCommondService
      * @return
      */
     public List<TrainCommond> selectCommondByDay(Date inputDate);
+
+    public List<TrainCommond> wordToCommond(MultipartFile file);
 }

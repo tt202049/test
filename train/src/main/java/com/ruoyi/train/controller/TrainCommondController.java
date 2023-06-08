@@ -7,14 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -23,6 +16,7 @@ import com.ruoyi.train.domain.TrainCommond;
 import com.ruoyi.train.service.ITrainCommondService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 调令管理Controller
@@ -85,6 +79,17 @@ public class TrainCommondController extends BaseController
         trainCommond.setCommondUser(userName);
         System.out.println(trainCommond);
         return toAjax(trainCommondService.insertTrainCommond(trainCommond));
+    }
+
+    /**
+     * 调令自动识别
+     */
+    @PreAuthorize("@ss.hasPermi('train:commondTrain:add')")
+    @PostMapping("/addByWord")
+    public AjaxResult addByWord(@RequestParam(value = "file")MultipartFile file){
+        System.out.println(file.isEmpty());
+        trainCommondService.wordToCommond(file);
+        return success();
     }
 
     /**

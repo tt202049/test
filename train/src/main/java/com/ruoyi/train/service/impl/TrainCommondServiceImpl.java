@@ -1,12 +1,17 @@
 package com.ruoyi.train.service.impl;
-
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.train.mapper.TrainCommondMapper;
 import com.ruoyi.train.domain.TrainCommond;
 import com.ruoyi.train.service.ITrainCommondService;
+import org.springframework.web.multipart.MultipartFile;
+
 
 /**
  * 调令管理Service业务层处理
@@ -99,5 +104,26 @@ public class TrainCommondServiceImpl implements ITrainCommondService
     @Override
     public List<TrainCommond> selectCommondByDay(Date inputDate){
         return trainCommondMapper.selectCommondByDay(inputDate);
+    }
+
+    /**
+     * 对word进行解析
+     *
+     */
+    public List<TrainCommond> wordToCommond(MultipartFile file){
+        try {
+            // 读取文档
+            FileInputStream in = (FileInputStream) file.getInputStream();
+            // 读取word文档信息
+            XWPFDocument xwpf = new XWPFDocument(in);
+            for (XWPFParagraph para : xwpf.getParagraphs()){
+                System.out.println(para.getText());
+
+            }
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

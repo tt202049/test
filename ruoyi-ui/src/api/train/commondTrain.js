@@ -51,3 +51,16 @@ export function selectCommondByDay(date){
     date:date
   })
 }
+
+
+// 上传调令word文档
+export function uploadWord(data){
+  return request({
+    url: '/train/commondTrain/addByWord',
+    headers: {
+      'Content-Type':'multipart/form-data'
+    },
+    method:'post',
+    data:data
+  })
+}
