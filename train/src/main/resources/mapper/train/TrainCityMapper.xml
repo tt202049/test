@@ -6,32 +6,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="TrainCity" id="TrainCityResult">
         <result property="trainId"    column="train_id"    />
-        <result property="groupId"    column="group_id"    />
         <result property="trainName"    column="train_name"    />
+        <result property="groupId"    column="group_id"    />
         <result property="depatureStation"    column="depature_station"    />
         <result property="terminalStation"    column="terminal_station"    />
         <result property="isAvaliable"    column="is_avaliable"    />
         <result property="trainsetNum"    column="trainset_num"    />
-        <result property="arriveTime"    column="arrive_time"    />
-        <result property="leaveTime"    column="leave_time"    />
+        <result property="presentNum"    column="present_num"    />
         <result property="platformNo"    column="platform_no"    />
         <result property="deportNo"    column="deport_no"    />
-        <result property="citytrainNote"    column="citytrain_note"    />
+        <result property="arriveTime"    column="arrive_time"    />
+        <result property="leaveTime"    column="leave_time"    />
+        <result property="maxDirction"    column="max_dirction"    />
+        <result property="shiftTime"    column="shift_time"    />
+        <result property="note"    column="note"    />
+        <result property="isWeekstop"    column="is_weekstop"    />
+        <result property="stopWeek"    column="stop_week"    />
+        <result property="stopDay"    column="stop_day"    />
+        <result property="orderStartday"    column="order_startday"    />
+        <result property="orderEndday"    column="order_endday"    />
     </resultMap>
 
     <sql id="selectTrainCityVo">
-        select train_id, group_id, train_name, depature_station, terminal_station, is_avaliable, trainset_num, arrive_time, leave_time, platform_no, deport_no, citytrain_note from train_city
+        select train_id, train_name, group_id, depature_station, terminal_station, is_avaliable, trainset_num, present_num, platform_no, deport_no, arrive_time, leave_time, max_dirction, shift_time, note, is_weekstop, stop_week, stop_day, order_startday, order_endday from train_city
     </sql>
 
     <select id="selectTrainCityList" parameterType="TrainCity" resultMap="TrainCityResult">
         <include refid="selectTrainCityVo"/>
         <where>  
-            <if test="trainId != null "> and train_id = #{trainId}</if>
-            <if test="groupId != null "> and group_id = #{groupId}</if>
             <if test="trainName != null  and trainName != ''"> and train_name like concat('%', #{trainName}, '%')</if>
+            <if test="groupId != null "> and group_id = #{groupId}</if>
             <if test="depatureStation != null  and depatureStation != ''"> and depature_station = #{depatureStation}</if>
             <if test="terminalStation != null  and terminalStation != ''"> and terminal_station = #{terminalStation}</if>
             <if test="isAvaliable != null "> and is_avaliable = #{isAvaliable}</if>
+            <if test="trainsetNum != null "> and trainset_num = #{trainsetNum}</if>
+            <if test="presentNum != null "> and present_num = #{presentNum}</if>
+            <if test="platformNo != null "> and platform_no = #{platformNo}</if>
+            <if test="deportNo != null  and deportNo != ''"> and deport_no = #{deportNo}</if>
+            <if test="arriveTime != null "> and arrive_time = #{arriveTime}</if>
+            <if test="leaveTime != null "> and leave_time = #{leaveTime}</if>
+            <if test="maxDirction != null  and maxDirction != ''"> and max_dirction = #{maxDirction}</if>
+            <if test="shiftTime != null "> and shift_time = #{shiftTime}</if>
+            <if test="note != null  and note != ''"> and note = #{note}</if>
+            <if test="isWeekstop != null "> and is_weekstop = #{isWeekstop}</if>
+            <if test="stopWeek != null  and stopWeek != ''"> and stop_week = #{stopWeek}</if>
+            <if test="stopDay != null  and stopDay != ''"> and stop_day = #{stopDay}</if>
+            <if test="orderStartday != null "> and order_startday = #{orderStartday}</if>
+            <if test="orderEndday != null "> and order_endday = #{orderEndday}</if>
         </where>
     </select>
     
@@ -40,54 +61,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where train_id = #{trainId}
     </select>
         
-    <insert id="insertTrainCity" parameterType="TrainCity">
+    <insert id="insertTrainCity" parameterType="TrainCity" useGeneratedKeys="true" keyProperty="trainId">
         insert into train_city
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="trainId != null">train_id,</if>
-            <if test="groupId != null">group_id,</if>
             <if test="trainName != null and trainName != ''">train_name,</if>
+            <if test="groupId != null">group_id,</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station,</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station,</if>
             <if test="isAvaliable != null">is_avaliable,</if>
             <if test="trainsetNum != null">trainset_num,</if>
-            <if test="arriveTime != null">arrive_time,</if>
-            <if test="leaveTime != null">leave_time,</if>
+            <if test="presentNum != null">present_num,</if>
             <if test="platformNo != null">platform_no,</if>
             <if test="deportNo != null">deport_no,</if>
-            <if test="citytrainNote != null">citytrain_note,</if>
+            <if test="arriveTime != null">arrive_time,</if>
+            <if test="leaveTime != null">leave_time,</if>
+            <if test="maxDirction != null">max_dirction,</if>
+            <if test="shiftTime != null">shift_time,</if>
+            <if test="note != null">note,</if>
+            <if test="isWeekstop != null">is_weekstop,</if>
+            <if test="stopWeek != null">stop_week,</if>
+            <if test="stopDay != null">stop_day,</if>
+            <if test="orderStartday != null">order_startday,</if>
+            <if test="orderEndday != null">order_endday,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="trainId != null">#{trainId},</if>
-            <if test="groupId != null">#{groupId},</if>
             <if test="trainName != null and trainName != ''">#{trainName},</if>
+            <if test="groupId != null">#{groupId},</if>
             <if test="depatureStation != null and depatureStation != ''">#{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">#{terminalStation},</if>
             <if test="isAvaliable != null">#{isAvaliable},</if>
             <if test="trainsetNum != null">#{trainsetNum},</if>
-            <if test="arriveTime != null">#{arriveTime},</if>
-            <if test="leaveTime != null">#{leaveTime},</if>
+            <if test="presentNum != null">#{presentNum},</if>
             <if test="platformNo != null">#{platformNo},</if>
             <if test="deportNo != null">#{deportNo},</if>
-            <if test="citytrainNote != null">#{citytrainNote},</if>
+            <if test="arriveTime != null">#{arriveTime},</if>
+            <if test="leaveTime != null">#{leaveTime},</if>
+            <if test="maxDirction != null">#{maxDirction},</if>
+            <if test="shiftTime != null">#{shiftTime},</if>
+            <if test="note != null">#{note},</if>
+            <if test="isWeekstop != null">#{isWeekstop},</if>
+            <if test="stopWeek != null">#{stopWeek},</if>
+            <if test="stopDay != null">#{stopDay},</if>
+            <if test="orderStartday != null">#{orderStartday},</if>
+            <if test="orderEndday != null">#{orderEndday},</if>
          </trim>
     </insert>
 
     <update id="updateTrainCity" parameterType="TrainCity">
         update train_city
         <trim prefix="SET" suffixOverrides=",">
-            <if test="groupId != null">group_id = #{groupId},</if>
             <if test="trainName != null and trainName != ''">train_name = #{trainName},</if>
+            <if test="groupId != null">group_id = #{groupId},</if>
             <if test="depatureStation != null and depatureStation != ''">depature_station = #{depatureStation},</if>
             <if test="terminalStation != null and terminalStation != ''">terminal_station = #{terminalStation},</if>
             <if test="isAvaliable != null">is_avaliable = #{isAvaliable},</if>
             <if test="trainsetNum != null">trainset_num = #{trainsetNum},</if>
-            <if test="arriveTime != null">arrive_time = #{arriveTime},</if>
-            <if test="leaveTime != null">leave_time = #{leaveTime},</if>
+            <if test="presentNum != null">present_num = #{presentNum},</if>
             <if test="platformNo != null">platform_no = #{platformNo},</if>
             <if test="deportNo != null">deport_no = #{deportNo},</if>
-            <if test="citytrainNote != null">citytrain_note = #{citytrainNote},</if>
+            <if test="arriveTime != null">arrive_time = #{arriveTime},</if>
+            <if test="leaveTime != null">leave_time = #{leaveTime},</if>
+            <if test="maxDirction != null">max_dirction = #{maxDirction},</if>
+            <if test="shiftTime != null">shift_time = #{shiftTime},</if>
+            <if test="note != null">note = #{note},</if>
+            <if test="isWeekstop != null">is_weekstop = #{isWeekstop},</if>
+            <if test="stopWeek != null">stop_week = #{stopWeek},</if>
+            <if test="stopDay != null">stop_day = #{stopDay},</if>
+            <if test="orderStartday != null">order_startday = #{orderStartday},</if>
+            <if test="orderEndday != null">order_endday = #{orderEndday},</if>
         </trim>
-        where citytrain_id = #{citytrainId}
+        where train_id = #{trainId}
     </update>
 
 
@@ -102,14 +145,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
-
-
     <delete id="deleteTrainCityByCitytrainId" parameterType="Long">
         delete from train_city where train_id = #{trainId}
     </delete>
 
     <delete id="deleteTrainCityByCitytrainIds" parameterType="String">
-        delete from train_city where train_id in
+        delete from train_city where train_id in 
         <foreach item="trainId" collection="array" open="(" separator="," close=")">
             #{trainId}
         </foreach>

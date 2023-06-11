@@ -2,10 +2,6 @@ package com.ruoyi.train.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.ruoyi.common.utils.serializer.DateJsonDeserializer;
-import com.ruoyi.common.utils.serializer.DateJsonSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -14,8 +10,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
 /**
  * 城际列车管理对象 train_city
  * 
- * @author YALO
- * @date 2023-03-27
+ * @author WANGMIN
+ * @date 2023-06-11
  */
 public class TrainCity extends BaseEntity
 {
@@ -24,13 +20,13 @@ public class TrainCity extends BaseEntity
     /** 城际列车ID */
     private Long trainId;
 
-    /** 交路ID */
-    @Excel(name = "交路ID")
-    private Long groupId;
-
     /** 城际列车号 */
     @Excel(name = "城际列车号")
     private String trainName;
+
+    /** 交路ID */
+    @Excel(name = "交路ID")
+    private Long groupId;
 
     /** 始发站 */
     @Excel(name = "始发站")
@@ -42,25 +38,15 @@ public class TrainCity extends BaseEntity
 
     /** 是否开行 */
     @Excel(name = "是否开行")
-    private Boolean isAvaliable;
+    private Long isAvaliable;
 
     /** 编组数量 */
     @Excel(name = "编组数量")
     private Long trainsetNum;
 
-    /** 到站时间 */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
-    @JsonSerialize(using = DateJsonSerializer.class)
-    @JsonFormat(pattern = "HH-mm")
-    @Excel(name = "到站时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date arriveTime;
-
-    /** 开车时间 */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
-    @JsonSerialize(using = DateJsonSerializer.class)
-    @JsonFormat(pattern = "HH-mm")
-    @Excel(name = "开车时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date leaveTime;
+    /** 图定编组数量 */
+    @Excel(name = "图定编组数量")
+    private Long presentNum;
 
     /** 站台号 */
     @Excel(name = "站台号")
@@ -70,18 +56,67 @@ public class TrainCity extends BaseEntity
     @Excel(name = "检票口")
     private String deportNo;
 
+    /** 到站时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "到站时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date arriveTime;
+
+    /** 开车时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "开车时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date leaveTime;
+
+    /** 最大车号方向 */
+    @Excel(name = "最大车号方向")
+    private String maxDirction;
+
+    /** 偏移天数 */
+    @Excel(name = "偏移天数")
+    private Long shiftTime;
+
     /** 备注 */
     @Excel(name = "备注")
-    private String citytrainNote;
+    private String note;
 
-    public void setTrainId(Long citytrainId)
+    /** 是否按周停车 */
+    @Excel(name = "是否按周停车")
+    private Long isWeekstop;
+
+    /** 停车星期 */
+    @Excel(name = "停车星期")
+    private String stopWeek;
+
+    /** 停开日期 */
+    @Excel(name = "停开日期")
+    private String stopDay;
+
+    /** 调令生效日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "调令生效日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date orderStartday;
+
+    /** 调令结束日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "调令结束日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date orderEndday;
+
+    public void setTrainId(Long trainId) 
     {
-        this.trainId = citytrainId;
+        this.trainId = trainId;
     }
 
-    public Long getTrainId()
+    public Long getTrainId() 
     {
         return trainId;
+    }
+    public void setTrainName(String trainName) 
+    {
+        this.trainName = trainName;
+    }
+
+    public String getTrainName() 
+    {
+        return trainName;
     }
     public void setGroupId(Long groupId) 
     {
@@ -91,15 +126,6 @@ public class TrainCity extends BaseEntity
     public Long getGroupId() 
     {
         return groupId;
-    }
-    public void setTrainName(String citytrainName)
-    {
-        this.trainName = citytrainName;
-    }
-
-    public String getTrainName()
-    {
-        return trainName;
     }
     public void setDepatureStation(String depatureStation) 
     {
@@ -119,12 +145,12 @@ public class TrainCity extends BaseEntity
     {
         return terminalStation;
     }
-    public void setIsAvaliable(Boolean isAvaliable)
+    public void setIsAvaliable(Long isAvaliable) 
     {
         this.isAvaliable = isAvaliable;
     }
 
-    public Boolean getIsAvaliable()
+    public Long getIsAvaliable() 
     {
         return isAvaliable;
     }
@@ -137,23 +163,14 @@ public class TrainCity extends BaseEntity
     {
         return trainsetNum;
     }
-    public void setArriveTime(Date arriveTime) 
+    public void setPresentNum(Long presentNum) 
     {
-        this.arriveTime = arriveTime;
+        this.presentNum = presentNum;
     }
 
-    public Date getArriveTime() 
+    public Long getPresentNum() 
     {
-        return arriveTime;
-    }
-    public void setLeaveTime(Date leaveTime) 
-    {
-        this.leaveTime = leaveTime;
-    }
-
-    public Date getLeaveTime() 
-    {
-        return leaveTime;
+        return presentNum;
     }
     public void setPlatformNo(Long platformNo) 
     {
@@ -173,31 +190,120 @@ public class TrainCity extends BaseEntity
     {
         return deportNo;
     }
-    public void setCitytrainNote(String citytrainNote) 
+    public void setArriveTime(Date arriveTime) 
     {
-        this.citytrainNote = citytrainNote;
+        this.arriveTime = arriveTime;
     }
 
-    public String getCitytrainNote() 
+    public Date getArriveTime() 
     {
-        return citytrainNote;
+        return arriveTime;
+    }
+    public void setLeaveTime(Date leaveTime) 
+    {
+        this.leaveTime = leaveTime;
+    }
+
+    public Date getLeaveTime() 
+    {
+        return leaveTime;
+    }
+    public void setMaxDirction(String maxDirction) 
+    {
+        this.maxDirction = maxDirction;
+    }
+
+    public String getMaxDirction() 
+    {
+        return maxDirction;
+    }
+    public void setShiftTime(Long shiftTime) 
+    {
+        this.shiftTime = shiftTime;
+    }
+
+    public Long getShiftTime() 
+    {
+        return shiftTime;
+    }
+    public void setNote(String note) 
+    {
+        this.note = note;
+    }
+
+    public String getNote() 
+    {
+        return note;
+    }
+    public void setIsWeekstop(Long isWeekstop) 
+    {
+        this.isWeekstop = isWeekstop;
+    }
+
+    public Long getIsWeekstop() 
+    {
+        return isWeekstop;
+    }
+    public void setStopWeek(String stopWeek) 
+    {
+        this.stopWeek = stopWeek;
+    }
+
+    public String getStopWeek() 
+    {
+        return stopWeek;
+    }
+    public void setStopDay(String stopDay) 
+    {
+        this.stopDay = stopDay;
+    }
+
+    public String getStopDay() 
+    {
+        return stopDay;
+    }
+    public void setOrderStartday(Date orderStartday) 
+    {
+        this.orderStartday = orderStartday;
+    }
+
+    public Date getOrderStartday() 
+    {
+        return orderStartday;
+    }
+    public void setOrderEndday(Date orderEndday) 
+    {
+        this.orderEndday = orderEndday;
+    }
+
+    public Date getOrderEndday() 
+    {
+        return orderEndday;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("trainId", getTrainId())
-            .append("groupId", getGroupId())
             .append("trainName", getTrainName())
+            .append("groupId", getGroupId())
             .append("depatureStation", getDepatureStation())
             .append("terminalStation", getTerminalStation())
             .append("isAvaliable", getIsAvaliable())
             .append("trainsetNum", getTrainsetNum())
-            .append("arriveTime", getArriveTime())
-            .append("leaveTime", getLeaveTime())
+            .append("presentNum", getPresentNum())
             .append("platformNo", getPlatformNo())
             .append("deportNo", getDeportNo())
-            .append("citytrainNote", getCitytrainNote())
+            .append("arriveTime", getArriveTime())
+            .append("leaveTime", getLeaveTime())
+            .append("maxDirction", getMaxDirction())
+            .append("shiftTime", getShiftTime())
+            .append("note", getNote())
+            .append("isWeekstop", getIsWeekstop())
+            .append("stopWeek", getStopWeek())
+            .append("stopDay", getStopDay())
+            .append("orderStartday", getOrderStartday())
+            .append("orderEndday", getOrderEndday())
             .toString();
     }
 }
